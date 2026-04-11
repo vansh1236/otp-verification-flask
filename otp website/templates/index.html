@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OTP Verification</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            width: 320px;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            width: 90%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .btn1 { background: #00c853; color: white; }
+        .btn2 { background: #2962ff; color: white; }
+
+        button:hover {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+
+        #timer { color: #ffeb3b; }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🔐 OTP Verification</h2>
+
+    <!-- Email Input -->
+    <form method="POST">
+        <input type="email" name="email" placeholder="Enter your email" required>
+        <button class="btn1" name="action" value="generate">Generate OTP</button>
+    </form>
+
+    <!-- OTP Verify -->
+    <form method="POST">
+        <input type="text" name="OTP" placeholder="Enter OTP" required>
+        <button class="btn2" name="action" value="verify">Verify OTP</button>
+    </form>
+
+    <p id="timer"></p>
+    <h3>{{ message }}</h3>
+</div>
+
+<script>
+let expiry = Number("{{ expiry }}") || 0;
+
+function updateTimer(){
+    if (expiry === 0) {
+        document.getElementById("timer").innerHTML = "⏳ Generate OTP first";
+        return;
+    }
+
+    let now = Math.floor(Date.now()/1000);
+    let left = expiry - now;
+
+    if(left <= 0){
+        document.getElementById("timer").innerHTML = "❌ OTP Expired!";
+    } else {
+        document.getElementById("timer").innerHTML = "OTP expires in: " + left + " sec";
+        setTimeout(updateTimer,1000);
+    }
+}
+
+updateTimer();
+</script>
+
+</body>
+</html>
